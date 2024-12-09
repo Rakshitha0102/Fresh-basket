@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshBasket - Cart</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styles for cart page */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            margin-top: 30px;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .table thead {
+            background-color: #f1f1f1;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f9f9f9;
+        }
+
+        .form-control {
+            font-size: 1rem;
+        }
+
+        .btn-primary, .btn-success, .btn-danger {
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0069d9;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .alert {
+            font-size: 1rem;
+            margin-top: 20px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .cart-summary {
+            font-size: 1.1rem;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2 class="text-center mb-4">Your Cart</h2>
+
+        {% if cart_items %}
+        <!-- Success Message -->
+        <div class="alert alert-success">
+            <p>Your cart is ready for checkout! Review your items and proceed with the order.</p>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>${{ "%.2f"|format(item.price) }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ "%.2f"|format(item.price * item.quantity) }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="3" class="text-right"><strong>Subtotal:</strong></td>
+                    <td><strong>${{ "%.2f"|format(cart_total) }}</strong></td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="text-right"><strong>Total:</strong></td>
+                    <td><strong>${{ "%.2f"|format(cart_total) }}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Cart Summary & Checkout Form -->
+        <div class="cart-summary">
+            <h4>Checkout</h4>
+            <form method="POST" action="{{ url_for('place_order') }}">
+                <input type="hidden" name="total_price" value="{{ cart_total }}">
+                {% for item in cart_items %}
+                <input type="hidden" name="items[]" value="{{ item.name }}|{{ item.quantity }}|{{ item.price }}">
+                {% endfor %}
+
+                <div class="form-group">
+                    <label for="address">Delivery Address</label>
+                    <input type="text" class="form-control" id="address" name="address" required placeholder="Enter your delivery address">
+                </div>
+
+                <div class="form-group">
+                    <label for="payment_method">Payment Method</label>
+                    <select class="form-control" id="payment_method" name="payment_method" required>
+                        <option value="" disabled selected>Select a payment method</option>
+                        <option value="Cash on Delivery">Cash On Delivery</option>
+                        <option value="credit_card">Credit Card</option>
+                        <option value="paypal">PayPal</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-success btn-block">Place Order</button>
+            </form>
+        </div>
+
+        {% else %}
+        <div class="alert alert-warning">
+            <p>Your cart is empty. Start shopping now!</p>
+            <a href="{{ url_for('shop') }}" class="btn btn-primary">Return to Shop</a>
+        </div>
+        {% endif %}
+        
+        <!-- Optional: Button to clear cart -->
+        {% if cart_items %}
+        <div class="text-center mt-4">
+            <form method="POST" action="{{ url_for('cart') }}">
+
+            </form>
+        </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>

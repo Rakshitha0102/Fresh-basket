@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Welcome to the Shop</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #a1c693;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .container {
+      width: 80%;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    
+    .header-image {
+      width: 50%; /* Resize image */
+      height: auto;
+      margin-bottom: 20px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .button {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      font-size: 16px;
+      margin: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .button:hover {
+      background-color: #3e8e41;
+    }
+    
+    .login-message {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 18px;
+      color: #4CAF50;
+    }
+
+    /* Additional Styling for Better Layout */
+    .button-container {
+      text-align: center;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to the Shop</h1>
+    <img src="{{ url_for('static', filename='images/fruits1.jpg') }}" alt="Header Image" class="header-image">
+
+    <div class="button-container">
+      <!-- Link to Home page -->
+      <a href="{{ url_for('home') }}">
+        <button class="button">Home</button>
+      </a>
+
+      <!-- Link to Browse Items page -->
+      <a href="{{ url_for('items') }}">
+        <button class="button">Browse Items</button>
+      </a>
+    </div>
+
+    <div class="login-message">Login successful!</div>
+  </div>
+</body>
+</html>
